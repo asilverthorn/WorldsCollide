@@ -4,7 +4,7 @@ import instruction.asm as asm
 def equipable_mod(espers):
     from data.characters import Characters
 
-    character_id_address = 0x1cf8
+    character_id_address = 0x1fcd # otherwise unused SRAM byte
     gray_out_if_equipped = 0xc35576
     set_text_color = 0xc35595
 

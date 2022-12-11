@@ -6,7 +6,8 @@ from enum import IntFlag
 class Esper(AbilityData):
     NO_BONUS = 0xff
     HP_10_PERCENT, HP_30_PERCENT, HP_50_PERCENT, MP_10_PERCENT, MP_30_PERCENT, MP_50_PERCENT, HP_100_PERCENT,\
-    LVL_30_PERCENT, LVL_50_PERCENT, STRENGTH_1, STRENGTH_2, SPEED_1, SPEED_2, STAMINA_1, STAMINA_2, MAGIC_1, MAGIC_2 = range(17)
+    EVADE_1, MAGIC_EVADE_1, STRENGTH_1, STRENGTH_2, SPEED_1, SPEED_2, STAMINA_1, STAMINA_2, MAGIC_1, MAGIC_2,\
+    DEFENSE_1, DEFENSE_2, MAGIC_DEFENSE_1, MAGIC_DEFENSE_2     = range(21)
 
     LEARN_RATES = [1, 2, 3, 4, 5, 6, 7, 8, 10, 15, 16, 20]
 
@@ -116,13 +117,13 @@ class Esper(AbilityData):
         self.spell_count = 0
 
     def set_bonus(self, bonus):
-        if bonus < 0 or bonus > self.MAGIC_2:
+        if bonus < 0 or bonus > self.MAGIC_DEFENSE_2:
             self.bonus = self.NO_BONUS
             return
 
-        if bonus == self.LVL_30_PERCENT or bonus == self.LVL_50_PERCENT:
-            self.bonus = self.NO_BONUS
-            return
+        #if bonus == self.LVL_30_PERCENT or bonus == self.LVL_50_PERCENT:
+        #    self.bonus = self.NO_BONUS
+        #    return
 
         self.bonus = bonus
 
@@ -137,6 +138,7 @@ class Esper(AbilityData):
         possible = [self.HP_10_PERCENT, self.HP_30_PERCENT, self.HP_50_PERCENT, self.MP_10_PERCENT,
                     self.MP_30_PERCENT, self.MP_50_PERCENT, self.HP_100_PERCENT, self.STRENGTH_1, self.STRENGTH_2,
                     self.SPEED_1, self.SPEED_2, self.STAMINA_1, self.STAMINA_2, self.MAGIC_1, self.MAGIC_2]
+        possible.extend([self.DEFENSE_1, self.DEFENSE_2, self.MAGIC_DEFENSE_1, self.MAGIC_DEFENSE_2, self.EVADE_1, self.MAGIC_EVADE_1])
         self.set_bonus(random.choice(possible))
 
     def get_equipable_characters(self):
@@ -162,10 +164,10 @@ class Esper(AbilityData):
             return "MP +50%"
         if self.bonus == self.HP_100_PERCENT:
             return "HP +100%"
-        if self.bonus == self.LVL_30_PERCENT:
-            return "LVL +30%"
-        if self.bonus == self.LVL_50_PERCENT:
-            return "LVL +50%"
+        # if self.bonus == self.LVL_30_PERCENT:
+        #     return "LVL +30%"
+        # if self.bonus == self.LVL_50_PERCENT:
+        #     return "LVL +50%"
         if self.bonus == self.STRENGTH_1:
             return "STRENGTH +1"
         if self.bonus == self.STRENGTH_2:
