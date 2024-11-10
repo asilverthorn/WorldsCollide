@@ -309,6 +309,8 @@ class EnemyScripts():
 
         if self.args.ability_scaling:
             self.enemy_script_abilities.scale_abilities_mod()
+        
+        self.enemy_script_abilities.remove_nothing_attacks_mod()
 
     def write(self):
         self.script_data.assign([script.data() for script in self.scripts])

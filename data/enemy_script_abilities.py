@@ -243,6 +243,31 @@ class EnemyScriptAbilities:
 
         gold_dragon_script.replace(target_self, target_default, count = 2)
 
+    def _remove_nothing_attacks(self, instruction):
+        from data.spell_names import id_name
+        import random
+        non_nothing = []
+        if type(instruction) is ai_instr.RandomAttack:
+            # Get the non-Nothing attacks
+            if instruction.attack1 != name_id["Nothing"]:
+                non_nothing.append(instruction.attack1)
+            if instruction.attack2 != name_id["Nothing"]:
+                non_nothing.append(instruction.attack2)
+            if instruction.attack3 != name_id["Nothing"]:
+                non_nothing.append(instruction.attack3)
+
+            # Get a random non-Nothing attack from what remains
+            if len(non_nothing) > 0:
+                random_non_nothing = random.choice(non_nothing)
+
+                # Replace the Nothing attack with the non-Nothing attack
+                if instruction.attack1 == name_id["Nothing"]:
+                    instruction.attack1 = random_non_nothing
+                if instruction.attack2 == name_id["Nothing"]: 
+                    instruction.attack2 = random_non_nothing
+                if instruction.attack3 == name_id["Nothing"]:
+                    instruction.attack3 = random_non_nothing
+
     def scale_abilities_mod(self):
         import data.bosses as bosses
 
@@ -268,3 +293,16 @@ class EnemyScriptAbilities:
         self.stooges_reflect_mod()
         self.wrexsoul_reflect_mod()
         self.gold_dragon_reflect_mod()
+
+    def remove_nothing_attacks_mod(self):
+        import data.bosses as bosses
+
+        for index, script in enumerate(self.enemy_scripts.scripts):
+            enemy = self.enemies.enemies[index]
+            if not self.args.scale_final_battles and enemy.id in bosses.final_battle_enemy_name:
+                continue
+            if not self.args.scale_eight_dragons and enemy.id in bosses.dragon_enemy_name:
+                continue
+
+            for instruction in script.instructions:
+                self._remove_nothing_attacks(instruction)
